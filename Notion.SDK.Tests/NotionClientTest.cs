@@ -11,8 +11,7 @@ namespace Notion.SDK.Tests
         [Fact]
         public async Task TestGetPage()
         {
-            const string authToken = "secret_Dw0bLepCGKVRCb3K3B5bpfjJtvmdH0wF5OM2ORkCeqg";
-            var client = new NotionClient(new HttpClient(new SocketsHttpHandler()));
+            var (client, authToken) = GetClientWithToken();
             var page = await client.GetPage("be32c99dddb349609fd086d38babd537", authToken);
 
             page.Id.ShouldNotBe(Guid.Empty);
@@ -30,8 +29,7 @@ namespace Notion.SDK.Tests
         [Fact]
         public async Task TestGetBlockChildren()
         {
-            const string authToken = "secret_Dw0bLepCGKVRCb3K3B5bpfjJtvmdH0wF5OM2ORkCeqg";
-            var client = new NotionClient(new HttpClient(new SocketsHttpHandler()));
+            var (client, authToken) = GetClientWithToken();
             var objectList = await client.GetBlockChildren("be32c99dddb349609fd086d38babd537", authToken);
             objectList.Object.ShouldBe("list");
             objectList.HasMore.ShouldBeFalse();
@@ -42,8 +40,7 @@ namespace Notion.SDK.Tests
         [Fact]
         public async Task TestGetParagraphBlock()
         {
-            const string authToken = "secret_Dw0bLepCGKVRCb3K3B5bpfjJtvmdH0wF5OM2ORkCeqg";
-            var client = new NotionClient(new HttpClient(new SocketsHttpHandler()));
+            var (client, authToken) = GetClientWithToken();
             var objectList = await client.GetBlockChildren("be32c99dddb349609fd086d38babd537", authToken);
             var paragraphBlock = Assert.IsType<ParagraphBlock>(objectList.Results[0]);
             paragraphBlock.Id.ShouldNotBe(Guid.Empty);
@@ -51,6 +48,13 @@ namespace Notion.SDK.Tests
             paragraphBlock.CreatedTime.ShouldBeGreaterThan(new DateTime(2021, 05, 01));
             paragraphBlock.LastEditedTime.ShouldBeGreaterThan(new DateTime(2021, 05, 01));
             paragraphBlock.HasChildren.ShouldBeFalse();
+        }
+
+        private static (NotionClient, string) GetClientWithToken()
+        {
+            var authToken = Environment.GetEnvironmentVariable("NOTION_API_KEY");
+            var client = new NotionClient(new HttpClient(new SocketsHttpHandler()));
+            return (client, authToken);
         }
     }
 }
