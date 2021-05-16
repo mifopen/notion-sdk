@@ -3,8 +3,11 @@ name: pr
 
 on:
   pull_request:
-    branches: 
-    - "*"
+    branches:
+      - "*"
+
+env:
+  NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
 
 jobs:
   build:

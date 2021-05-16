@@ -3,8 +3,11 @@ name: main
 
 on:
   push:
-    branches: 
-    - main
+    branches:
+      - main
+
+env:
+  NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
 
 jobs:
   build:
@@ -30,12 +33,12 @@ jobs:
     needs: build
 
     steps:
-    - uses: actions/checkout@v2
-    - name: publish
-      id: publish_nuget
-      uses: rohith/publish-nuget@v2
-      with:
-        PROJECT_FILE_PATH: Notion.SDK/Notion.SDK.csproj
-        TAG_FORMAT: "*"
-        INCLUDE_SYMBOLS: true
+      - uses: actions/checkout@v2
+      - name: publish
+        id: publish_nuget
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: Notion.SDK/Notion.SDK.csproj
+          TAG_FORMAT: "*"
+          INCLUDE_SYMBOLS: true
 
