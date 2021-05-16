@@ -36,6 +36,6 @@ jobs:
       uses: rohith/publish-nuget@v2
       with:
         PROJECT_FILE_PATH: Notion.SDK/Notion.SDK.csproj
-        TAG_FORMAT: *
+        TAG_FORMAT: "*"
         INCLUDE_SYMBOLS: true
 
