@@ -1,7 +1,8 @@
+# PROJECT_ROOT_PATH/.github/workflows/pr.yml
 name: pr
 
 on:
-  pull_request:
+  push:
     branches: 
       - "*"
 
