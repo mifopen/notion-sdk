@@ -40,5 +40,4 @@ jobs:
         with:
           PROJECT_FILE_PATH: Notion.SDK/Notion.SDK.csproj
           TAG_FORMAT: "*"
-          INCLUDE_SYMBOLS: true
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
