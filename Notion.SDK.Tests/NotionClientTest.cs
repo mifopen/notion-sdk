@@ -12,8 +12,9 @@ namespace Notion.SDK.Tests
         public async Task TestGetPage()
         {
             var (client, authToken) = GetClientWithToken();
-            var page = await client.GetPage("be32c99dddb349609fd086d38babd537", authToken);
+            var response = await client.GetPage("be32c99dddb349609fd086d38babd537", authToken);
 
+            var page = response.GetValue();
             page.Id.ShouldNotBe(Guid.Empty);
             page.Object.ShouldBe("page");
             page.CreatedTime.ShouldBeGreaterThan(new DateTime(2021, 05, 01));
@@ -30,7 +31,9 @@ namespace Notion.SDK.Tests
         public async Task TestGetBlockChildren()
         {
             var (client, authToken) = GetClientWithToken();
-            var objectList = await client.GetBlockChildren("be32c99dddb349609fd086d38babd537", authToken);
+            var response = await client.GetBlockChildren("be32c99dddb349609fd086d38babd537", authToken);
+
+            var objectList = response.GetValue();
             objectList.Object.ShouldBe("list");
             objectList.HasMore.ShouldBeFalse();
             objectList.NextCursor.ShouldBeNull();
@@ -41,7 +44,9 @@ namespace Notion.SDK.Tests
         public async Task TestGetParagraphBlock()
         {
             var (client, authToken) = GetClientWithToken();
-            var objectList = await client.GetBlockChildren("be32c99dddb349609fd086d38babd537", authToken);
+            var response = await client.GetBlockChildren("be32c99dddb349609fd086d38babd537", authToken);
+
+            var objectList = response.GetValue();
             var paragraphBlock = Assert.IsType<ParagraphBlock>(objectList.Results[0]);
             paragraphBlock.Id.ShouldNotBe(Guid.Empty);
             paragraphBlock.Object.ShouldBe("block");
