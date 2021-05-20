@@ -70,6 +70,7 @@ namespace Notion
             };
             var stream = new MemoryStream();
             await JsonSerializer.SerializeAsync(stream, requestBody, cancellationToken: cancellationToken);
+            stream.Position = 0;
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
