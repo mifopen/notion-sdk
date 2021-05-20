@@ -29,6 +29,7 @@ namespace Notion
                     "rate_limited" => NotionErrorCode.RateLimited,
                     "internal_server_error" => NotionErrorCode.InternalServerError,
                     "service_unavailable" => NotionErrorCode.ServiceUnavailable,
+                    "exchange_for_token_failed" => NotionErrorCode.ExchangeForTokenFailed,
                     _ => throw new ArgumentOutOfRangeException(nameof(code), code, null),
                 },
                 message

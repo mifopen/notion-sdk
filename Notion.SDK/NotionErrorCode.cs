@@ -13,5 +13,6 @@ namespace Notion
         RateLimited,
         InternalServerError,
         ServiceUnavailable,
+        ExchangeForTokenFailed,
     }
 }
