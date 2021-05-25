@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,6 +30,49 @@ namespace Notion
             request.Headers.Add("Notion-Version", ApiVersion);
             var response = await httpClient.SendAsync(request, cancellationToken);
             return await GetResponse<Page>(response, cancellationToken);
+        }
+
+        public async Task<NotionResponse<ObjectList<Page>>> Search(string authToken, string? query = null,
+            SearchFilterObjectType? filterObjectType = null,
+            CancellationToken cancellationToken = default)
+        {
+            var requestBody = new SearchRequest
+            {
+                Query = query,
+                Filter = filterObjectType == null
+                    ? null
+                    : new SearchRequest.SearchFilter
+                    {
+                        Property = "object",
+                        Value = filterObjectType.Value.ToString().ToLower(),
+                    },
+            };
+            var stream = new MemoryStream();
+            await JsonSerializer.SerializeAsync(
+                stream,
+                requestBody,
+                new JsonSerializerOptions
+                {
+                    IgnoreNullValues = true,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                },
+                cancellationToken);
+            stream.Position = 0;
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.notion.com/v1/search")
+            {
+                Content = new StreamContent(stream)
+                {
+                    Headers =
+                    {
+                        ContentType = new MediaTypeHeaderValue("application/json"),
+                    },
+                },
+            };
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+            request.Headers.Add("Notion-Version", ApiVersion);
+            var response = await httpClient.SendAsync(request, cancellationToken);
+            return await GetResponse<ObjectList<Page>>(response, cancellationToken);
         }
 
         public async Task<NotionResponse<ObjectList<Block>>> GetBlockChildren(

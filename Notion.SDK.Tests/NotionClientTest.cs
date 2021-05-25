@@ -55,6 +55,16 @@ namespace Notion.SDK.Tests
             paragraphBlock.HasChildren.ShouldBeFalse();
         }
 
+        [Fact]
+        public async Task TestSearch()
+        {
+            var (client, authToken) = GetClientWithToken();
+            var response = await client.Search(authToken, filterObjectType: SearchFilterObjectType.Page);
+            var list = response.GetValue();
+            list.Results.ShouldNotBeEmpty();
+            list.Results[0].Parent.Type.ShouldBe("workspace");
+        }
+
         private static (NotionClient, string) GetClientWithToken()
         {
             var authToken = Environment.GetEnvironmentVariable("NOTION_API_KEY");
