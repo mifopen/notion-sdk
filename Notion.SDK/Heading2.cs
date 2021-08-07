@@ -1,6 +1,6 @@
 namespace Notion
 {
-    public record TitlePropertyValue : PropertyValue
+    public record Heading2 : Block
     {
         public RichText[] Text { get; set; }
     }

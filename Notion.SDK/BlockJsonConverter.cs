@@ -20,7 +20,7 @@ namespace Notion
             var value = root.GetProperty(type);
             return type switch
             {
-                "paragraph" => new ParagraphBlock
+                "paragraph" => new Paragraph
                 {
                     Id = id,
                     Type = type!,
@@ -28,9 +28,9 @@ namespace Notion
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
                     HasChildren = hasChildren,
-                    Text = value.GetProperty("text").EnumerateArray().Select(x => new RichTextObject()).ToArray(),
+                    Text = value.GetProperty("text").EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
                 },
-                "heading_1" => new Heading1Block
+                "heading_1" => new Heading1
                 {
                     Id = id,
                     Type = type!,
@@ -38,9 +38,9 @@ namespace Notion
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
                     HasChildren = hasChildren,
-                    Text = value.GetProperty("text").EnumerateArray().Select(x => new RichTextObject()).ToArray(),
+                    Text = value.GetProperty("text").EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
                 },
-                "heading_2" => new Heading2Block
+                "heading_2" => new Heading2
                 {
                     Id = id,
                     Type = type!,
@@ -48,9 +48,9 @@ namespace Notion
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
                     HasChildren = hasChildren,
-                    Text = value.GetProperty("text").EnumerateArray().Select(x => new RichTextObject()).ToArray(),
+                    Text = value.GetProperty("text").EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
                 },
-                "heading_3" => new Heading3Block
+                "heading_3" => new Heading3
                 {
                     Id = id,
                     Type = type!,
@@ -58,7 +58,7 @@ namespace Notion
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
                     HasChildren = hasChildren,
-                    Text = value.GetProperty("text").EnumerateArray().Select(x => new RichTextObject()).ToArray(),
+                    Text = value.GetProperty("text").EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
                 },
                 _ => throw new NotSupportedException($"Block with type {type} is not supported"),
             };

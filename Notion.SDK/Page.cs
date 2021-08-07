@@ -13,5 +13,6 @@ namespace Notion
         public bool Archived { get; set; }
         public PageParent Parent { get; set; }
         public Dictionary<string, PropertyValue> Properties { get; set; }
+        public string Url { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace Notion
                 {
                     Id = id!,
                     Type = type!,
-                    Text = value.EnumerateArray().Select(x => new RichTextObject()).ToArray(),
+                    Text = value.EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
                 },
                 _ => throw new NotSupportedException($"Property value with type {type} is not supported"),
             };

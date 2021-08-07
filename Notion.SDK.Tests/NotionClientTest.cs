@@ -21,6 +21,7 @@ namespace Notion.SDK.Tests
             page.LastEditedTime.ShouldBeGreaterThan(new DateTime(2021, 05, 01));
             page.Archived.ShouldBeFalse();
             page.Parent.Type.ShouldBe("workspace");
+            page.Url.ShouldBe("https://www.notion.so/PageInWorkspace-be32c99dddb349609fd086d38babd537");
             var titlePageProperty = page.Properties["title"].ShouldBeOfType<TitlePropertyValue>();
             titlePageProperty.Id.ShouldBe("title");
             titlePageProperty.Type.ShouldBe("title");
@@ -47,7 +48,7 @@ namespace Notion.SDK.Tests
             var response = await client.GetBlockChildren("be32c99dddb349609fd086d38babd537", authToken);
 
             var objectList = response.GetValue();
-            var paragraphBlock = Assert.IsType<ParagraphBlock>(objectList.Results[0]);
+            var paragraphBlock = Assert.IsType<Paragraph>(objectList.Results[0]);
             paragraphBlock.Id.ShouldNotBe(Guid.Empty);
             paragraphBlock.Object.ShouldBe("block");
             paragraphBlock.CreatedTime.ShouldBeGreaterThan(new DateTime(2021, 05, 01));
