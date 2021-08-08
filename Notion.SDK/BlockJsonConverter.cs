@@ -60,6 +60,16 @@ namespace Notion
                     HasChildren = hasChildren,
                     Text = value.GetProperty("text").EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
                 },
+                "bulleted_list_item" => new BulletedListItem
+                {
+                    Id = id,
+                    Type = type,
+                    Object = @object,
+                    CreatedTime = createdTime,
+                    LastEditedTime = lastEditedTime,
+                    HasChildren = hasChildren,
+                    Text = value.GetProperty("text").EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
+                },
                 "unsupported" => new Unsupported(),
                 _ => throw new NotSupportedException($"Block with type {type} is not supported"),
             };
