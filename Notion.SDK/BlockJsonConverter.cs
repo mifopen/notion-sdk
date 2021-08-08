@@ -23,7 +23,7 @@ namespace Notion
                 "paragraph" => new Paragraph
                 {
                     Id = id,
-                    Type = type!,
+                    Type = type,
                     Object = @object,
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
@@ -33,7 +33,7 @@ namespace Notion
                 "heading_1" => new Heading1
                 {
                     Id = id,
-                    Type = type!,
+                    Type = type,
                     Object = @object,
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
@@ -43,7 +43,7 @@ namespace Notion
                 "heading_2" => new Heading2
                 {
                     Id = id,
-                    Type = type!,
+                    Type = type,
                     Object = @object,
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
@@ -53,13 +53,14 @@ namespace Notion
                 "heading_3" => new Heading3
                 {
                     Id = id,
-                    Type = type!,
+                    Type = type,
                     Object = @object,
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
                     HasChildren = hasChildren,
                     Text = value.GetProperty("text").EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
                 },
+                "unsupported" => new Unsupported(),
                 _ => throw new NotSupportedException($"Block with type {type} is not supported"),
             };
         }
