@@ -2,6 +2,7 @@ using System;
 
 namespace Notion
 {
+    [JsonInterfaceConverter(typeof(JsonConverters.PolymorphicConverter<IBlock>))]
     public interface IBlock
     {
         public Guid Id { get; }

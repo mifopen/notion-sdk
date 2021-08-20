@@ -1,5 +1,6 @@
 namespace Notion
 {
+    [JsonInterfaceConverter(typeof(JsonConverters.PolymorphicConverter<IRichText>))]
     public interface IRichText
     {
         public string PlainText { get; }
