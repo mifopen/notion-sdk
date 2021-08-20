@@ -28,12 +28,12 @@ namespace Notion
             var type = json.GetProperty("type").GetString()!;
             return type switch
             {
-                "page" => new PageParent
+                "page_id" => new PageParent
                 {
                     Type = type,
                     PageId = json.GetProperty("page_id").GetGuid(),
                 },
-                "database" => new DatabaseParent
+                "database_id" => new DatabaseParent
                 {
                     Type = type,
                     DatabaseId = json.GetProperty("database_id").GetGuid(),
