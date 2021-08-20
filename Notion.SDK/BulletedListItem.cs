@@ -1,6 +1,6 @@
 namespace Notion
 {
-    public record BulletedListItem : Block
+    public record BulletedListItem : BlockWithChildren
     {
         public RichText[] Text { get; set; }
     }

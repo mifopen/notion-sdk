@@ -1,15 +1,13 @@
 using System;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Notion
 {
-    public class BlockJsonConverter : JsonConverter<Block>
+    public static class BlockJsonConverter
     {
-        public override Block? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public static Block Convert(JsonDocument jsonDocument)
         {
-            using var jsonDocument = JsonDocument.ParseValue(ref reader);
             var root = jsonDocument.RootElement;
             var id = root.GetProperty("id").GetGuid();
             var type = root.GetProperty("type").GetString()!;
@@ -37,7 +35,6 @@ namespace Notion
                     Object = @object,
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
-                    HasChildren = hasChildren,
                     Text = value.GetProperty("text").EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
                 },
                 "heading_2" => new Heading2
@@ -47,7 +44,6 @@ namespace Notion
                     Object = @object,
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
-                    HasChildren = hasChildren,
                     Text = value.GetProperty("text").EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
                 },
                 "heading_3" => new Heading3
@@ -57,7 +53,6 @@ namespace Notion
                     Object = @object,
                     CreatedTime = createdTime,
                     LastEditedTime = lastEditedTime,
-                    HasChildren = hasChildren,
                     Text = value.GetProperty("text").EnumerateArray().Select(RichTextJsonConverter.Convert).ToArray(),
                 },
                 "bulleted_list_item" => new BulletedListItem
@@ -73,11 +68,6 @@ namespace Notion
                 "unsupported" => new Unsupported(),
                 _ => throw new NotSupportedException($"Block with type {type} is not supported"),
             };
-        }
-
-        public override void Write(Utf8JsonWriter writer, Block value, JsonSerializerOptions options)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace Notion
 {
-    public record Paragraph : Block
+    public record Paragraph : BlockWithChildren
     {
         public RichText[] Text { get; set; }
     }

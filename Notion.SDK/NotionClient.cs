@@ -6,7 +6,6 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,7 +28,14 @@ namespace Notion
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             request.Headers.Add("Notion-Version", ApiVersion);
             var response = await httpClient.SendAsync(request, cancellationToken);
-            return await GetResponse<Page>(response, cancellationToken);
+            var result = await GetResponse<JsonElement>(response, cancellationToken);
+            if (result.IsFailure)
+            {
+                return new NotionResponse<Page>(result.GetError());
+            }
+
+            var value = result.GetValue();
+            return new NotionResponse<Page>(PageJsonConverter.Convert(value));
         }
 
         public async Task<NotionResponse<ObjectList<Page>>> Search(string authToken, string? query = null,
@@ -72,7 +78,20 @@ namespace Notion
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             request.Headers.Add("Notion-Version", ApiVersion);
             var response = await httpClient.SendAsync(request, cancellationToken);
-            return await GetResponse<ObjectList<Page>>(response, cancellationToken);
+            var result = await GetResponse<ObjectList<JsonElement>>(response, cancellationToken);
+            if (result.IsFailure)
+            {
+                return new NotionResponse<ObjectList<Page>>(result.GetError());
+            }
+
+            var value = result.GetValue();
+            return new NotionResponse<ObjectList<Page>>(new ObjectList<Page>
+            {
+                Object = value.Object,
+                Results = value.Results.Select(PageJsonConverter.Convert).ToArray(),
+                HasMore = value.HasMore,
+                NextCursor = value.NextCursor,
+            });
         }
 
         public async Task<NotionResponse<ObjectList<Block>>> GetBlockChildren(
@@ -94,7 +113,20 @@ namespace Notion
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             request.Headers.Add("Notion-Version", ApiVersion);
             var response = await httpClient.SendAsync(request, cancellationToken);
-            return await GetResponse<ObjectList<Block>>(response, cancellationToken);
+            var result = await GetResponse<ObjectList<JsonDocument>>(response, cancellationToken);
+            if (result.IsFailure)
+            {
+                return new NotionResponse<ObjectList<Block>>(result.GetError());
+            }
+
+            var value = result.GetValue();
+            return new NotionResponse<ObjectList<Block>>(new ObjectList<Block>
+            {
+                Object = value.Object,
+                Results = value.Results.Select(BlockJsonConverter.Convert).ToArray(),
+                HasMore = value.HasMore,
+                NextCursor = value.NextCursor,
+            });
         }
 
         public async Task<NotionResponse<TokenResponse>> ExchangeCodeForOAuthToken(
