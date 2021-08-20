@@ -20,11 +20,11 @@ namespace Notion.SDK.Tests
             page.CreatedTime.ShouldBeGreaterThan(new DateTime(2021, 05, 01));
             page.LastEditedTime.ShouldBeGreaterThan(new DateTime(2021, 05, 01));
             page.Archived.ShouldBeFalse();
-            page.Parent.Type.ShouldBe("workspace");
+            page.Parent.Type.ShouldBe(ParentType.Workspace);
             page.Url.ShouldBe("https://www.notion.so/PageInWorkspace-be32c99dddb349609fd086d38babd537");
             var titlePageProperty = page.Properties["title"].ShouldBeOfType<TitlePropertyValue>();
             titlePageProperty.Id.ShouldBe("title");
-            titlePageProperty.Type.ShouldBe("title");
+            titlePageProperty.Type.ShouldBe(PropertyValueType.Title);
             titlePageProperty.Text.ShouldNotBeEmpty();
         }
 
@@ -63,7 +63,7 @@ namespace Notion.SDK.Tests
             var response = await client.Search(authToken, filterObjectType: SearchFilterObjectType.Page);
             var list = response.GetValue();
             list.Results.ShouldNotBeEmpty();
-            list.Results[0].Parent.Type.ShouldBe("workspace");
+            list.Results[0].Parent.Type.ShouldBe(ParentType.Workspace);
         }
 
         private static (NotionClient, string) GetClientWithToken()

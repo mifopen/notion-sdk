@@ -35,7 +35,7 @@ namespace Notion
             }
 
             var value = result.GetValue();
-            return new NotionResponse<Page>(PageJsonConverter.Convert(value));
+            return new NotionResponse<Page>(JsonConverters.ConvertPage(value));
         }
 
         public async Task<NotionResponse<ObjectList<Page>>> Search(string authToken, string? query = null,
@@ -88,13 +88,13 @@ namespace Notion
             return new NotionResponse<ObjectList<Page>>(new ObjectList<Page>
             {
                 Object = value.Object,
-                Results = value.Results.Select(PageJsonConverter.Convert).ToArray(),
+                Results = value.Results.Select(JsonConverters.ConvertPage).ToArray(),
                 HasMore = value.HasMore,
                 NextCursor = value.NextCursor,
             });
         }
 
-        public async Task<NotionResponse<ObjectList<Block>>> GetBlockChildren(
+        public async Task<NotionResponse<ObjectList<IBlock>>> GetBlockChildren(
             string blockId,
             string authToken,
             string? startCursor = null,
@@ -113,17 +113,17 @@ namespace Notion
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             request.Headers.Add("Notion-Version", ApiVersion);
             var response = await httpClient.SendAsync(request, cancellationToken);
-            var result = await GetResponse<ObjectList<JsonDocument>>(response, cancellationToken);
+            var result = await GetResponse<ObjectList<JsonElement>>(response, cancellationToken);
             if (result.IsFailure)
             {
-                return new NotionResponse<ObjectList<Block>>(result.GetError());
+                return new NotionResponse<ObjectList<IBlock>>(result.GetError());
             }
 
             var value = result.GetValue();
-            return new NotionResponse<ObjectList<Block>>(new ObjectList<Block>
+            return new NotionResponse<ObjectList<IBlock>>(new ObjectList<IBlock>
             {
                 Object = value.Object,
-                Results = value.Results.Select(BlockJsonConverter.Convert).ToArray(),
+                Results = value.Results.Select(JsonConverters.ConvertBlock).ToArray(),
                 HasMore = value.HasMore,
                 NextCursor = value.NextCursor,
             });

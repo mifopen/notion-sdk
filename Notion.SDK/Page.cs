@@ -10,10 +10,10 @@ namespace Notion
         public DateTime CreatedTime { get; set; }
         public DateTime LastEditedTime { get; set; }
         public bool Archived { get; set; }
-        public Parent Parent { get; set; } = null!;
-        public Dictionary<string, PropertyValue> Properties { get; set; }
+        public IParent Parent { get; set; } = null!;
+        public Dictionary<string, IPropertyValue> Properties { get; set; }
         public string Url { get; set; }
-        public Block[]? Children { get; set; }
+        public IBlock[]? Children { get; set; }
         public bool HasChildren => true;
     }
 }
