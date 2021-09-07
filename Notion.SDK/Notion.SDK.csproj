@@ -4,7 +4,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>Notion</RootNamespace>
         <Nullable>enable</Nullable>
-        <Version>2021.05.13.11</Version>
+        <Version>2021.05.13.12</Version>
     </PropertyGroup>
 
 </Project>

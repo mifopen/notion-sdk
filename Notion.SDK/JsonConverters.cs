@@ -174,12 +174,12 @@ namespace Notion
 
         public class PolymorphicConverter<T> : JsonConverter<T>
         {
-            public override T Read(
+            public override T? Read(
                 ref Utf8JsonReader reader,
                 Type typeToConvert,
                 JsonSerializerOptions options)
             {
-                throw new NotImplementedException();
+                return (T?)JsonSerializer.Deserialize(ref reader, typeToConvert, options);
             }
 
             public override void Write(
