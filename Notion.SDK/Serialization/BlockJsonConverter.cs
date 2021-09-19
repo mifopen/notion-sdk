@@ -12,6 +12,11 @@ namespace Notion.Serialization
             Block block = type switch
             {
                 Constants.BlockType.Paragraph => new Paragraph(),
+                Constants.BlockType.Heading1 => new Heading1(),
+                Constants.BlockType.Heading2 => new Heading2(),
+                Constants.BlockType.Heading3 => new Heading3(),
+                Constants.BlockType.BulletedListItem => new BulletedListItem(),
+                Constants.BlockType.Unsupported => new Unsupported(),
                 _ => new Unsupported(),
             };
 
@@ -48,6 +53,18 @@ namespace Notion.Serialization
                 case Constants.BlockType.Paragraph:
                     Helpers.ReadObject(ref reader, (Paragraph)block, ReadParagraphProperty);
                     break;
+                case Constants.BlockType.Heading1:
+                    Helpers.ReadObject(ref reader, (Heading1)block, ReadHeading1Property);
+                    break;
+                case Constants.BlockType.Heading2:
+                    Helpers.ReadObject(ref reader, (Heading2)block, ReadHeading2Property);
+                    break;
+                case Constants.BlockType.Heading3:
+                    Helpers.ReadObject(ref reader, (Heading3)block, ReadHeading3Property);
+                    break;
+                case Constants.BlockType.BulletedListItem:
+                    Helpers.ReadObject(ref reader, (BulletedListItem)block, ReadBulletedListItemProperty);
+                    break;
                 //todo
                 default:
                     reader.Skip();
@@ -63,6 +80,58 @@ namespace Notion.Serialization
                     paragraph.Text = JsonSerializer.Deserialize<RichText[]>(ref reader);
                     break;
                 case Constants.ParagraphProperty.Children:
+                    reader.Skip();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(propertyName), propertyName, null);
+            }
+        }
+
+        private static void ReadHeading1Property(ref Utf8JsonReader reader, Heading1 heading1, string propertyName)
+        {
+            switch (propertyName)
+            {
+                case Constants.Heading1Property.Text:
+                    heading1.Text = JsonSerializer.Deserialize<RichText[]>(ref reader);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(propertyName), propertyName, null);
+            }
+        }
+
+        private static void ReadHeading2Property(ref Utf8JsonReader reader, Heading2 heading2, string propertyName)
+        {
+            switch (propertyName)
+            {
+                case Constants.Heading2Property.Text:
+                    heading2.Text = JsonSerializer.Deserialize<RichText[]>(ref reader);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(propertyName), propertyName, null);
+            }
+        }
+
+        private static void ReadHeading3Property(ref Utf8JsonReader reader, Heading3 heading3, string propertyName)
+        {
+            switch (propertyName)
+            {
+                case Constants.Heading3Property.Text:
+                    heading3.Text = JsonSerializer.Deserialize<RichText[]>(ref reader);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(propertyName), propertyName, null);
+            }
+        }
+
+        private static void ReadBulletedListItemProperty(ref Utf8JsonReader reader, BulletedListItem item,
+            string propertyName)
+        {
+            switch (propertyName)
+            {
+                case Constants.BulletedListItemProperty.Text:
+                    item.Text = JsonSerializer.Deserialize<RichText[]>(ref reader);
+                    break;
+                case Constants.BulletedListItemProperty.Children:
                     reader.Skip();
                     break;
                 default:
