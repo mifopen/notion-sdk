@@ -1,10 +1,12 @@
 namespace Notion
 {
-    public record TitlePropertyValue : IPropertyValue
+    public class TitlePropertyValue : PropertyValue
     {
-        public string Id { get; set; }
-        public PropertyValueType Type { get; set; }
+        public TitlePropertyValue()
+        {
+            Type = PropertyValueType.Title;
+        }
 
-        public IRichText[] Text { get; set; }
+        public RichText[] Text { get; set; }
     }
 }

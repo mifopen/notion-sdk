@@ -1,16 +1,8 @@
-using System;
-
 namespace Notion
 {
-    public record Paragraph : IBlock, IWithChildren
+    public class Paragraph : Block
     {
-        public Guid Id { get; set; }
-        public string Object { get; set; }
-        public string Type { get; set; }
-        public DateTime CreatedTime { get; set; }
-        public DateTime LastEditedTime { get; set; }
-        public IBlock[]? Children { get; set; }
-        public bool HasChildren { get; set; }
-        public IRichText[] Text { get; set; }
+        public override BlockType Type => BlockType.Paragraph;
+        public RichText[] Text { get; set; }
     }
 }

@@ -1,7 +1,10 @@
 namespace Notion
 {
-    public record WorkspaceParent : IParent
+    public class WorkspaceParent : Parent
     {
-        public ParentType Type { get; set; }
+        public WorkspaceParent()
+        {
+            Type = ParentType.Workspace;
+        }
     }
 }

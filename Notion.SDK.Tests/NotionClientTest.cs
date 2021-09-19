@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Shouldly;
@@ -6,6 +7,8 @@ using Xunit;
 
 namespace Notion.SDK.Tests
 {
+    //todo test each block
+    //todo test serialization/deserialization
     public class NotionClientTest
     {
         [Fact]
@@ -25,7 +28,9 @@ namespace Notion.SDK.Tests
             var titlePageProperty = page.Properties["title"].ShouldBeOfType<TitlePropertyValue>();
             titlePageProperty.Id.ShouldBe("title");
             titlePageProperty.Type.ShouldBe(PropertyValueType.Title);
-            titlePageProperty.Text.ShouldNotBeEmpty();
+            var text = titlePageProperty.Text.Single().ShouldBeOfType<Text>();
+            text.Content.ShouldBe("PageInWorkspace");
+            text.Link.ShouldBeNull();
         }
 
         [Fact]
@@ -48,12 +53,25 @@ namespace Notion.SDK.Tests
             var response = await client.GetBlockChildren("be32c99dddb349609fd086d38babd537", authToken);
 
             var objectList = response.GetValue();
-            var paragraphBlock = Assert.IsType<Paragraph>(objectList.Results[0]);
+            var paragraphBlock = objectList.Results[0].ShouldBeOfType<Paragraph>();
             paragraphBlock.Id.ShouldNotBe(Guid.Empty);
             paragraphBlock.Object.ShouldBe("block");
+            paragraphBlock.Type.ShouldBe(BlockType.Paragraph);
             paragraphBlock.CreatedTime.ShouldBeGreaterThan(new DateTime(2021, 05, 01));
             paragraphBlock.LastEditedTime.ShouldBeGreaterThan(new DateTime(2021, 05, 01));
             paragraphBlock.HasChildren.ShouldBeFalse();
+            var text = paragraphBlock.Text.Single().ShouldBeOfType<Text>();
+            text.Content.ShouldBe("Just text block");
+            text.Link.ShouldBeNull();
+            text.Href.ShouldBeNull();
+            text.PlainText.ShouldBe("Just text block");
+            text.Type.ShouldBe(RichTextType.Text);
+            text.Annotations.Bold.ShouldBe(false);
+            text.Annotations.Italic.ShouldBe(false);
+            text.Annotations.Code.ShouldBe(false);
+            text.Annotations.Color.ShouldBe("default");
+            text.Annotations.Strikethrough.ShouldBe(false);
+            text.Annotations.Underline.ShouldBe(false);
         }
 
         [Fact]
@@ -68,7 +86,8 @@ namespace Notion.SDK.Tests
 
         private static (NotionClient, string) GetClientWithToken()
         {
-            var authToken = Environment.GetEnvironmentVariable("NOTION_API_KEY");
+            // var authToken = Environment.GetEnvironmentVariable("NOTION_API_KEY");
+            var authToken = "secret_zc0AbZDoam2lgjoothl0Oe9EaL7e9TgkxdZLf1e9Bbi";
             var client = new NotionClient(new HttpClient(new SocketsHttpHandler()));
             return (client, authToken);
         }

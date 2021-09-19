@@ -1,14 +1,8 @@
-using System;
-
 namespace Notion
 {
-    public record Heading1 : IBlock
+    public class Heading1 : Block
     {
-        public Guid Id { get; set; }
-        public string Object { get; set; }
-        public string Type { get; set; }
-        public DateTime CreatedTime { get; set; }
-        public DateTime LastEditedTime { get; set; }
-        public IRichText[] Text { get; set; }
+        public override BlockType Type => BlockType.Heading1;
+        public RichText[] Text { get; set; }
     }
 }

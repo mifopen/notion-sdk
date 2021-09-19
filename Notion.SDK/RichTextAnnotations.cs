@@ -1,6 +1,6 @@
 namespace Notion
 {
-    public record RichTextAnnotations
+    public class RichTextAnnotations
     {
         public bool Bold { get; set; }
         public bool Italic { get; set; }

@@ -2,9 +2,13 @@ using System;
 
 namespace Notion
 {
-    public record DatabaseParent : IParent
+    public class DatabaseParent : Parent
     {
-        public ParentType Type { get; set; }
+        public DatabaseParent()
+        {
+            Type = ParentType.Database;
+        }
+
         public Guid DatabaseId { get; set; }
     }
 }

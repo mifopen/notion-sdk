@@ -28,14 +28,7 @@ namespace Notion
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             request.Headers.Add("Notion-Version", ApiVersion);
             var response = await httpClient.SendAsync(request, cancellationToken);
-            var result = await GetResponse<JsonElement>(response, cancellationToken);
-            if (result.IsFailure)
-            {
-                return new NotionResponse<Page>(result.GetError());
-            }
-
-            var value = result.GetValue();
-            return new NotionResponse<Page>(JsonConverters.ConvertPage(value));
+            return await GetResponse<Page>(response, cancellationToken);
         }
 
         public async Task<NotionResponse<ObjectList<Page>>> Search(string authToken, string? query = null,
@@ -78,23 +71,10 @@ namespace Notion
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             request.Headers.Add("Notion-Version", ApiVersion);
             var response = await httpClient.SendAsync(request, cancellationToken);
-            var result = await GetResponse<ObjectList<JsonElement>>(response, cancellationToken);
-            if (result.IsFailure)
-            {
-                return new NotionResponse<ObjectList<Page>>(result.GetError());
-            }
-
-            var value = result.GetValue();
-            return new NotionResponse<ObjectList<Page>>(new ObjectList<Page>
-            {
-                Object = value.Object,
-                Results = value.Results.Select(JsonConverters.ConvertPage).ToArray(),
-                HasMore = value.HasMore,
-                NextCursor = value.NextCursor,
-            });
+            return await GetResponse<ObjectList<Page>>(response, cancellationToken);
         }
 
-        public async Task<NotionResponse<ObjectList<IBlock>>> GetBlockChildren(
+        public async Task<NotionResponse<ObjectList<Block>>> GetBlockChildren(
             string blockId,
             string authToken,
             string? startCursor = null,
@@ -113,20 +93,7 @@ namespace Notion
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             request.Headers.Add("Notion-Version", ApiVersion);
             var response = await httpClient.SendAsync(request, cancellationToken);
-            var result = await GetResponse<ObjectList<JsonElement>>(response, cancellationToken);
-            if (result.IsFailure)
-            {
-                return new NotionResponse<ObjectList<IBlock>>(result.GetError());
-            }
-
-            var value = result.GetValue();
-            return new NotionResponse<ObjectList<IBlock>>(new ObjectList<IBlock>
-            {
-                Object = value.Object,
-                Results = value.Results.Select(JsonConverters.ConvertBlock).ToArray(),
-                HasMore = value.HasMore,
-                NextCursor = value.NextCursor,
-            });
+            return await GetResponse<ObjectList<Block>>(response, cancellationToken);
         }
 
         public async Task<NotionResponse<TokenResponse>> ExchangeCodeForOAuthToken(

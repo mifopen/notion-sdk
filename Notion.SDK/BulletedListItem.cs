@@ -1,16 +1,8 @@
-using System;
-
 namespace Notion
 {
-    public record BulletedListItem : IBlock, IWithChildren
+    public class BulletedListItem : Block
     {
-        public Guid Id { get; set; }
-        public string Object { get; set; }
-        public string Type { get; set; }
-        public DateTime CreatedTime { get; set; }
-        public DateTime LastEditedTime { get; set; }
-        public IBlock[]? Children { get; set; }
-        public bool HasChildren { get; set; }
-        public IRichText[] Text { get; set; }
+        public override BlockType Type => BlockType.BulletedListItem;
+        public RichText[] Text { get; set; }
     }
 }

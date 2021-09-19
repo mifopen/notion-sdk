@@ -6,8 +6,4 @@ namespace Notion
         Mention,
         Equation,
     }
-
-    public enum BlockType
-    {
-    }
 }
