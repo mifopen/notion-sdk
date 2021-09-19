@@ -87,5 +87,26 @@ namespace Notion.Serialization
             public const string Text = "text";
             public const string Children = "children";
         }
+        
+        public static class Heading1Property
+        {
+            public const string Text = "text";
+        }
+        
+        public static class Heading2Property
+        {
+            public const string Text = "text";
+        }
+
+        public static class Heading3Property
+        {
+            public const string Text = "text";
+        }
+        
+        public static class BulletedListItemProperty
+        {
+            public const string Text = "text";
+            public const string Children = "children";
+        }
     }
 }

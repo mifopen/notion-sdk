@@ -89,21 +89,27 @@ namespace Notion.Serialization
             switch (block)
             {
                 case Heading1 heading1:
+                    writer.WritePropertyName(Constants.Heading1Property.Text);
                     JsonSerializer.Serialize(writer, heading1.Text, options);
                     break;
                 case Heading2 heading2:
+                    writer.WritePropertyName(Constants.Heading2Property.Text);
                     JsonSerializer.Serialize(writer, heading2.Text, options);
                     break;
                 case Heading3 heading3:
+                    writer.WritePropertyName(Constants.Heading3Property.Text);
                     JsonSerializer.Serialize(writer, heading3.Text, options);
                     break;
                 case Paragraph paragraph:
+                    writer.WritePropertyName(Constants.ParagraphProperty.Text);
                     JsonSerializer.Serialize(writer, paragraph.Text, options);
                     break;
                 case BulletedListItem bulletedListItem:
+                    writer.WritePropertyName(Constants.BulletedListItemProperty.Text);
                     JsonSerializer.Serialize(writer, bulletedListItem.Text, options);
                     break;
                 case Unsupported:
+                    //todo
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(block));
