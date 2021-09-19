@@ -12,7 +12,8 @@ namespace Notion.Serialization
             Parent parent = type switch
             {
                 Constants.ParentType.Workspace => new WorkspaceParent(),
-                //todo
+                Constants.ParentType.Database => new DatabaseParent(),
+                Constants.ParentType.Page => new PageParent(),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null),
             };
 
@@ -31,10 +32,14 @@ namespace Notion.Serialization
                 case Constants.ParentType.Workspace:
                     reader.Skip();
                     break;
-                //todo
-                default:
-                    reader.Skip();
+                case Constants.ParentType.Database:
+                    ((DatabaseParent)parent).DatabaseId = reader.GetGuid();
                     break;
+                case Constants.ParentType.Page:
+                    ((PageParent)parent).PageId = reader.GetGuid();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(propertyName), propertyName, null);
             }
         }
 
@@ -51,7 +56,12 @@ namespace Notion.Serialization
                 case WorkspaceParent:
                     writer.WriteBooleanValue(true);
                     break;
-                //todo
+                case DatabaseParent databaseParent:
+                    writer.WriteStringValue(databaseParent.DatabaseId);
+                    break;
+                case PageParent pageParent:
+                    writer.WriteStringValue(pageParent.PageId);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(parent));
             }

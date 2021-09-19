@@ -23,7 +23,8 @@ namespace Notion.Serialization
         public static class ParentType
         {
             public const string Workspace = "workspace";
-            //todo
+            public const string Page = "page_id";
+            public const string Database = "database_id";
         }
 
         public static class ParentProperty
